@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div>
+        <button class="greeting-button">Good Morning</button>
+        <button class="greeting-button">Good Afternoon</button>
+        <button class="greeting-button">Good Night</button>
+        <button class="dont-click-me">Don’t Click Me</button>
+    </div>
+
+   
+    <script>
+        $(".greeting-button").click((event) => {
+            alert(event.currentTarget.innerHTML)
+        });
+    </script>
+
+
+    <br>
+
+    <div id="question-section"> </div>
+    <script>
+        const myQuestions = [{
+                question: "1 + 2 is ? ",
+                answers: ["1", "2", "3"],
+                correctAnswer: 2
+            },
+            {
+                question: "What is the best site for Web Programmer ?",
+                answers: ["Stack Overflow", "Quora", "w3school"],
+                correctAnswer: 0
+            },
+            {
+                question: "Who is Prime minister fo Thailand ? ",
+                answers: ["Prayut Chan-o-cha", "Yingluck Shinawatra", "Abhisit Vejjajiva", "Somchai Wongsawat"],
+                correctAnswer: 0
+            }
+        ];
+
+        let data = `<form id="from-data"> `
+        myQuestions.forEach((e, i) => {
+            const _index = i + 1;
+            data += `<p>${_index}. ${e.question}</p>`
+            e.answers.forEach((x, index) => {
+                data += `<div id="question-section">
+                    <input type="radio" id="radio-index-${index}" name="radio-res-${_index}" value="${x}">
+                    <label for="radio-index-${_index}">${x}</label>
+                </div>`
+            });
+        });
+        data += `<br /><button type="submit">Submit</button>`
+        data += "</form>"
+
+        $("#question-section").append(data);
+
+        const _res = {}
+        $('#from-data').submit((event) => {
+            event.preventDefault()
+            checkUserAnswerAllQuestion()
+        });
+
+        function checkUserAnswerAllQuestion() {
+            const logData = []
+            const logRes = []
+            myQuestions.forEach((e, i) => {
+                const index = i + 1;
+                const data = $(`input[name='radio-res-${index}']:checked`).val()
+                if (!data) {
+                    logData.push(index)
+                } else {
+                    // console.log(`data`, data, e.answers[e.correctAnswer])
+                    if (data != e.answers[e.correctAnswer]) logRes.push(index)
+                }
+            });
+
+            if (logData.length > 0) alert(`คุณไม่ได้ตอบ ข้อ ${logData.toString()}`)
+            else checkAnswer(logRes)
+
+        }
+
+        function checkAnswer(arr) {
+            // console.log(`arr`, arr)
+            if (arr.length > 0) alert(`ผิด ${arr.length} ข้อ`)
+            else alert(`เก่งมากถูกทุกข้อ`)
+
+        }
+    </script>
+
+
+</body>
+
+</html>
